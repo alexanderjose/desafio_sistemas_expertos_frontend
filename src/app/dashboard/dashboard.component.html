@@ -1,0 +1,110 @@
+<br><br><br><br>
+<div class="container">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <!-- Button trigger modal -->
+      <p *ngIf="is_admin">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" (click)="open(content)" data-bs-target="#exampleModal">
+        <!-- <button type="button" class="btn btn-success"> -->
+          Nuevo Ticket 
+        </button>
+      </p>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-bordered caption-top">
+          <caption>LISTADO DE TICKETS</caption>
+          <thead class="table-secondary">
+            <tr>
+              <th class="text-center">T&iacute;tulo</th>
+              <th class="text-center">Descripci&oacute;n</th>
+              <th class="text-center">Estado</th>
+              <th class="text-center">Fecha</th>
+            </tr>
+          </thead>
+          <tbody class="table-light">
+            <!-- <tr *ngFor="let tickets of listadoTickets| paginate: { itemsPerPage: nitemsPerPage, currentPage: p }"> -->
+            <tr *ngFor="let tickets of listadoTickets">
+              <td class="text-left">{{ tickets.titulo }}</td>
+              <td class="text-center">{{ tickets.descripcion }}</td>
+              <td class="text-center">{{ tickets.estado_nombre }}</td>
+              <td class="text-center">{{ tickets.fecha_creacion | date: 'dd-MM-YYYY HH:mm:ss' }}</td>
+            </tr>
+          </tbody>
+            <!-- <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="listadoTarjetas.length">
+            </ngb-pagination> -->
+            <!-- <ngb-pagination [collectionSize]="listadoTarjetas.length" [(page)]="page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true">
+            </ngb-pagination> -->
+        </table>
+        <!-- <div class="row">
+          <div class="col-6">
+            <div class="row">
+              <label for="idPageSize" class="col-6 col-form-label">Cantidad de registros por p&aacute;gina:</label>
+              <div class="col-2">
+                <select (change)="onChangePageSizeConfig($event.target)" class="form-select" id="idPageSize">
+                  <option [value]="i" *ngFor="let i of pageSizeOptions">{{i}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <pagination-controls
+                (pageChange)="p = $event"
+                previousLabel="Anterior"
+                nextLabel="Siguiente">
+              </pagination-controls>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Create Modal -->
+  <ng-template #content let-modal>
+    <form [formGroup]="form" class="" (ngSubmit)="crearTicket()">
+    <!-- <form [formGroup]="form" class="" (click)="crearTicket()"> -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Nuevo Ticket</h4>
+        <button type="button" class="btn btn-danger" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true"><i class="fas fa-times"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group input-group-lg mb-3">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fas fa-heading" [class.green-icon]="this.form.get('titulo')?.valid" [class.red-icon]="this.form.get('titulo')?.invalid && this.form.get('titulo')?.touched"></i>
+              </span>
+              <input type="text" formControlName="titulo" maxlength="255" class="form-control" placeholder="Titulo" aria-label="Titulo" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group input-group-lg mb-3">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fas fa-align-justify" [class.green-icon]="this.form.get('descripcion')?.valid" [class.red-icon]="this.form.get('descripcion')?.invalid && this.form.get('descripcion')?.touched"></i>
+              </span>
+              <!-- <input type="textarea" formControlName="descripcion" maxlength="2048" class="form-control" placeholder="Descripci&oacute;n" aria-label="Descripcion" aria-describedby="basic-addon1"> -->
+              <textarea class="form-control" formControlName="descripcion" aria-label="With textarea" placeholder="Descripci&oacute;n" rows="8"></textarea>
+            </div>
+            <div class="input-group input-group-lg mb-3">
+              <span class="input-group-text">
+                <i class="fas fa-list-ol"></i>
+              </span>
+              <select [(ngModel)]="selectedEstado" class="form-control" formControlName="estado">
+                <option *ngFor="let estado of comboEstados" [ngValue]="estado.id">{{ estado.descripcion }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="d-grid gap-2">
+          <button button [disabled]="this.form.invalid" type="submit" class="btn btn-success btn-lg">
+          <i class="fas fa-database"></i>&nbsp; Aceptar</button>
+        </div>
+      </div>
+  </form>
+  </ng-template>
+
+  
+  

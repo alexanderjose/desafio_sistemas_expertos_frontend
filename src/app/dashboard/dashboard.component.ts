@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Estado } from './interfaces/estado.interface';
+import { Estado, Ticket } from './interfaces/estado.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,32 +11,22 @@ import { Estado } from './interfaces/estado.interface';
 })
 export class DashboardComponent{
 
-  listadoTickets: any;
+  listadoTickets: Ticket[] = [];
+  comboEstados: Estado[] = [];
   private baseurl: string = "http://127.0.0.1:8000";
   public is_admin: boolean = false;
   public constante: string = "";
 
-  tarjeta: any;
   closeResult = '';
-  form:FormGroup;
-  // comboEstados: Estado[];
+  form: FormGroup;
   page = 1;
   pageSize = 10;
   p = 1;
   pageSizeOptions = [5, 10, 20, 50, 100]
   nitemsPerPage = this.pageSizeOptions[0]
-  
-  comboEstados = [
-    { id: "", descripcion: "-- Seleccione --" },
-    { id: "1", descripcion: "Abierto" },
-    { id: "2", descripcion: "Pendiente" },
-    { id: "3", descripcion: "En Proceso" },
-    { id: "4", descripcion: "Resuelto" },
-    { id: "5", descripcion: "Cerrado" }
-  ]
-  
-  selectedEstado: any = this.comboEstados[0].id;
 
+  selectedEstado: string = "";
+  
   constructor(
     private http: HttpClient,
     private modalService: NgbModal,
@@ -54,6 +44,8 @@ export class DashboardComponent{
       let response = JSON.parse(JSON.stringify(data))
       this.is_admin = response.is_admin;
       this.listadoTickets = response.data;
+      this.comboEstados = response.estados;
+      this.selectedEstado = this.comboEstados[0].id;
     });
   }
 
